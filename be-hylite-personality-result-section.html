@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Be-hylite Personality 30 — Result Section</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─────────────────────────────────────────
+       TOKEN / DESIGN SYSTEM
+    ───────────────────────────────────────── */
+    :root {
+      --color-bg:          #FAF9F7;
+      --color-surface:     #FFFFFF;
+      --color-ivory:       #F5F1EB;
+      --color-greige:      #E8E2D9;
+      --color-greige-deep: #C8BFB2;
+      --color-charcoal:    #2C2C2C;
+      --color-charcoal-lt: #4A4A4A;
+      --color-muted:       #888278;
+      --color-gold:        #B89B72;
+      --color-gold-lt:     #D4B98A;
+      --color-gold-pale:   #F0E8D8;
+      --color-line:        #DDD8D0;
+
+      --font-serif-en:     'Cormorant Garamond', serif;
+      --font-serif-ja:     'Noto Serif JP', serif;
+      --font-sans-ja:      'Noto Sans JP', sans-serif;
+
+      --radius-card:       2px;
+      --radius-chip:       100px;
+
+      --shadow-card:       0 1px 20px rgba(44,44,44,.06);
+      --shadow-card-hover: 0 4px 32px rgba(44,44,44,.10);
+
+      --transition:        .3s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ─────────────────────────────────────────
+       RESET / BASE
+    ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      background: var(--color-bg);
+      color: var(--color-charcoal);
+      font-family: var(--font-sans-ja);
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.8;
+    }
+    img { display: block; max-width: 100%; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* ─────────────────────────────────────────
+       PAGE WRAPPER (demo centering)
+    ───────────────────────────────────────── */
+    .page-demo {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 16px 80px;
+      background: var(--color-bg);
+    }
+
+    /* ─────────────────────────────────────────
+       ROOT SECTION
+    ───────────────────────────────────────── */
+    .result-type-template {
+      width: 100%;
+      max-width: 480px;         /* スマホ縦・Instagram比率に最適化 */
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      background: var(--color-surface);
+      box-shadow: var(--shadow-card);
+      position: relative;
+    }
+
+    /* ─────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────── */
+    .result-hero {
+      position: relative;
+      background: var(--color-ivory);
+      overflow: hidden;
+    }
+
+    /* 画像コンテナ */
+    .result-hero__image-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+    }
+    .result-hero__image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: brightness(.96) saturate(.88);
+      transition: transform 1.2s var(--transition);
+    }
+    .result-hero:hover .result-hero__image {
+      transform: scale(1.02);
+    }
+
+    /* グラデーションオーバーレイ */
+    .result-hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 40%,
+        rgba(245,241,235,.55) 72%,
+        rgba(245,241,235,.92) 100%
+      );
+      pointer-events: none;
+    }
+
+    /* Eyebrow — 左上に固定 */
+    .result-hero__eyebrow {
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      font-family: var(--font-serif-en);
+      font-size: .66rem;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--color-gold);
+      z-index: 2;
+    }
+    .result-hero__eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      height: 1px;
+      background: var(--color-gold);
+      vertical-align: middle;
+      margin-right: 8px;
+      margin-top: -1px;
+    }
+
+    /* Type number — 右上 */
+    .result-hero__type-number {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-family: var(--font-serif-en);
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--color-charcoal);
+      opacity: .18;
+      line-height: 1;
+      letter-spacing: .05em;
+      z-index: 2;
+      user-select: none;
+    }
+
+    /* テキストグループ（画像下端） */
+    .result-hero__text-block {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0 28px 32px;
+      z-index: 3;
+    }
+
+    .result-hero__character-name {
+      font-family: var(--font-serif-en);
+      font-size: .7rem;
+      font-weight: 400;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--color-gold);
+      margin-bottom: 6px;
+    }
+
+    .result-hero__type-title {
+      font-family: var(--font-serif-ja);
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: .08em;
+      color: var(--color-charcoal);
+      margin-bottom: 12px;
+    }
+
+    .result-hero__divider {
+      width: 32px;
+      height: 1px;
+      background: var(--color-gold);
+      margin-bottom: 14px;
+    }
+
+    .result-hero__lead-copy {
+      font-family: var(--font-serif-ja);
+      font-size: .82rem;
+      font-weight: 300;
+      line-height: 1.85;
+      letter-spacing: .04em;
+      color: var(--color-charcoal-lt);
+    }
+
+    /* ─────────────────────────────────────────
+       CLUSTER BLOCK
+    ───────────────────────────────────────── */
+    .result-cluster-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--color-line);
+      border-top: 1px solid var(--color-line);
+      border-bottom: 1px solid var(--color-line);
+    }
+
+    .cluster-item {
+      background: var(--color-surface);
+      padding: 22px 20px 20px;
+      position: relative;
+    }
+    .cluster-item--main {
+      background: var(--color-charcoal);
+    }
+    .cluster-item--sub {
+      background: var(--color-surface);
+    }
+
+    .cluster-item__label {
+      font-family: var(--font-serif-en);
+      font-size: .58rem;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .cluster-item--main .cluster-item__label {
+      color: var(--color-gold-lt);
+    }
+    .cluster-item--sub .cluster-item__label {
+      color: var(--color-muted);
+    }
+
+    .cluster-item__name {
+      font-family: var(--font-serif-ja);
+      font-size: .95rem;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: .05em;
+      margin-bottom: 6px;
+    }
+    .cluster-item--main .cluster-item__name {
+      color: #FFFFFF;
+    }
+    .cluster-item--sub .cluster-item__name {
+      color: var(--color-charcoal);
+    }
+
+    .cluster-item__desc {
+      font-size: .68rem;
+      font-weight: 300;
+      line-height: 1.7;
+      letter-spacing: .02em;
+    }
+    .cluster-item--main .cluster-item__desc {
+      color: var(--color-greige-deep);
+    }
+    .cluster-item--sub .cluster-item__desc {
+      color: var(--color-muted);
+    }
+
+    /* Main badge */
+    .cluster-item--main::after {
+      content: 'Main';
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-family: var(--font-serif-en);
+      font-size: .5rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--color-gold);
+      opacity: .7;
+    }
+
+    /* ─────────────────────────────────────────
+       KEYWORD CHIPS
+    ───────────────────────────────────────── */
+    .result-keywords {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 24px 28px;
+      border-bottom: 1px solid var(--color-line);
+      flex-wrap: wrap;
+    }
+
+    .keyword-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 14px;
+      border: 1px solid var(--color-greige-deep);
+      border-radius: var(--radius-chip);
+      font-family: var(--font-sans-ja);
+      font-size: .68rem;
+      font-weight: 300;
+      letter-spacing: .1em;
+      color: var(--color-charcoal-lt);
+      background: transparent;
+    }
+    .keyword-chip::before {
+      content: '#';
+      font-family: var(--font-serif-en);
+      font-size: .7rem;
+      color: var(--color-gold);
+      font-weight: 300;
+    }
+
+    /* ─────────────────────────────────────────
+       INNER SECTION BASE
+    ───────────────────────────────────────── */
+    .result-section {
+      padding: 36px 28px;
+      border-bottom: 1px solid var(--color-line);
+    }
+    .result-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .result-section__eyebrow {
+      font-family: var(--font-serif-en);
+      font-size: .6rem;
+      font-weight: 400;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--color-gold);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .result-section__eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--color-greige);
+    }
+
+    .result-section__heading {
+      font-family: var(--font-serif-ja);
+      font-size: 1rem;
+      font-weight: 400;
+      letter-spacing: .08em;
+      color: var(--color-charcoal);
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    /* ─────────────────────────────────────────
+       TYPE SUMMARY
+    ───────────────────────────────────────── */
+    .result-summary__text {
+      font-family: var(--font-serif-ja);
+      font-size: .82rem;
+      font-weight: 300;
+      line-height: 2;
+      letter-spacing: .04em;
+      color: var(--color-charcoal-lt);
+    }
+
+    /* ─────────────────────────────────────────
+       INSIGHT GRID
+    ───────────────────────────────────────── */
+    .result-insight-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .insight-item {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 0;
+      align-items: start;
+    }
+
+    .insight-item__label {
+      font-family: var(--font-sans-ja);
+      font-size: .62rem;
+      font-weight: 400;
+      letter-spacing: .08em;
+      color: var(--color-gold);
+      padding-top: 3px;
+      line-height: 1.6;
+      white-space: nowrap;
+    }
+
+    .insight-item__value {
+      font-family: var(--font-sans-ja);
+      font-size: .78rem;
+      font-weight: 300;
+      line-height: 1.8;
+      letter-spacing: .04em;
+      color: var(--color-charcoal-lt);
+      padding-left: 12px;
+      border-left: 1px solid var(--color-greige);
+    }
+
+    /* ─────────────────────────────────────────
+       COMMUNICATION GUIDE
+    ───────────────────────────────────────── */
+    .result-communication__cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--color-line);
+      border: 1px solid var(--color-line);
+    }
+
+    .comm-col {
+      background: var(--color-surface);
+      padding: 20px 16px;
+    }
+    .comm-col--ng {
+      background: var(--color-ivory);
+    }
+
+    .comm-col__label {
+      font-family: var(--font-serif-en);
+      font-size: .58rem;
+      font-weight: 400;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .comm-col--ok .comm-col__label { color: var(--color-gold); }
+    .comm-col--ng .comm-col__label { color: var(--color-muted); }
+
+    .comm-col__list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .comm-col__item {
+      font-family: var(--font-sans-ja);
+      font-size: .72rem;
+      font-weight: 300;
+      line-height: 1.6;
+      letter-spacing: .03em;
+      color: var(--color-charcoal-lt);
+      padding-left: 12px;
+      position: relative;
+    }
+    .comm-col__item::before {
+      position: absolute;
+      left: 0;
+      top: 7px;
+      content: '';
+      display: block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+    }
+    .comm-col--ok .comm-col__item::before {
+      background: var(--color-gold);
+    }
+    .comm-col--ng .comm-col__item::before {
+      background: var(--color-greige-deep);
+    }
+    .comm-col--ng .comm-col__item {
+      opacity: .75;
+      text-decoration-line: line-through;
+      text-decoration-color: var(--color-greige-deep);
+    }
+
+    /* ─────────────────────────────────────────
+       PLANNER MEMO
+    ───────────────────────────────────────── */
+    .planner-memo {
+      background: var(--color-charcoal);
+      padding: 32px 28px;
+      border-bottom: 1px solid var(--color-charcoal);
+    }
+
+    .planner-memo__eyebrow {
+      font-family: var(--font-serif-en);
+      font-size: .6rem;
+      font-weight: 400;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--color-gold);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .planner-memo__eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(200,191,178,.25);
+    }
+
+    .planner-memo__heading {
+      font-family: var(--font-serif-ja);
+      font-size: .9rem;
+      font-weight: 400;
+      letter-spacing: .08em;
+      color: #FFFFFF;
+      margin-bottom: 16px;
+    }
+
+    .planner-memo__text {
+      font-family: var(--font-sans-ja);
+      font-size: .78rem;
+      font-weight: 300;
+      line-height: 1.9;
+      letter-spacing: .04em;
+      color: var(--color-greige-deep);
+    }
+
+    /* ─────────────────────────────────────────
+       FOOTER CTA
+    ───────────────────────────────────────── */
+    .result-footer-cta {
+      padding: 32px 28px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      background: var(--color-surface);
+    }
+
+    .result-footer-cta__note {
+      font-family: var(--font-serif-en);
+      font-size: .6rem;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      text-align: center;
+    }
+
+    .result-footer-cta__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-sans-ja);
+      font-size: .72rem;
+      font-weight: 300;
+      letter-spacing: .1em;
+      color: var(--color-charcoal);
+      border-bottom: 1px solid var(--color-gold);
+      padding-bottom: 3px;
+      transition: color var(--transition), border-color var(--transition);
+    }
+    .result-footer-cta__link:hover {
+      color: var(--color-gold);
+    }
+    .result-footer-cta__link::after {
+      content: '→';
+      font-family: var(--font-serif-en);
+      font-size: .85rem;
+      color: var(--color-gold);
+    }
+
+    /* ─────────────────────────────────────────
+       TYPE NUMBER WATERMARK (bottom right)
+    ───────────────────────────────────────── */
+    .result-type-template::after {
+      content: attr(data-type-number);
+      position: absolute;
+      bottom: 80px;
+      right: 20px;
+      font-family: var(--font-serif-en);
+      font-size: 6rem;
+      font-weight: 300;
+      color: var(--color-charcoal);
+      opacity: .03;
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE — TABLET / WIDE
+    ───────────────────────────────────────── */
+    @media (min-width: 640px) {
+      .result-type-template {
+        max-width: 520px;
+      }
+      .result-hero__type-title {
+        font-size: 2.4rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      /* ワイドレイアウト：ページに埋め込む場合はカード幅を固定 */
+      .result-type-template {
+        max-width: 480px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-demo">
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION: result-type-template
+     data-type-number は水印用 watermark
+════════════════════════════════════════════════════════ -->
+<section
+  class="result-type-template"
+  data-type-number="03"
+  aria-label="診断結果 タイプ03 ヒロイン"
+>
+
+  <!-- ── HERO ──────────────────────────────────────── -->
+  <header class="result-hero">
+
+    <div class="result-hero__image-wrap">
+      <img
+        class="result-hero__image"
+        src="https://example.com/type03.jpg"
+        alt="タイプ03 ヒロイン イメージビジュアル"
+        loading="eager"
+        onerror="this.style.background='#E8E2D9';this.removeAttribute('src')"
+      />
+      <div class="result-hero__overlay" aria-hidden="true"></div>
+    </div>
+
+    <span class="result-hero__eyebrow" aria-hidden="true">Wedding Value Portrait</span>
+    <span class="result-hero__type-number" aria-hidden="true">03</span>
+
+    <div class="result-hero__text-block">
+      <p class="result-hero__character-name">Heroine</p>
+      <h1 class="result-hero__type-title">ヒロイン</h1>
+      <div class="result-hero__divider" aria-hidden="true"></div>
+      <p class="result-hero__lead-copy">祝福のまんなかで、<br>心から輝ける一日を。</p>
+    </div>
+
+  </header>
+  <!-- /HERO -->
+
+
+  <!-- ── CLUSTER BLOCK ─────────────────────────────── -->
+  <div class="result-cluster-block" role="list" aria-label="クラスタ分類">
+
+    <div class="cluster-item cluster-item--main" role="listitem">
+      <p class="cluster-item__label">Main Cluster</p>
+      <p class="cluster-item__name">あこがれ希実</p>
+      <p class="cluster-item__desc">夢を叶えたいヒロイン型</p>
+    </div>
+
+    <div class="cluster-item cluster-item--sub" role="listitem">
+      <p class="cluster-item__label">Sub Cluster</p>
+      <p class="cluster-item__name">ほほえみ友実</p>
+      <p class="cluster-item__desc">みんなで楽しみたい共有型</p>
+    </div>
+
+  </div>
+  <!-- /CLUSTER BLOCK -->
+
+
+  <!-- ── KEYWORDS ──────────────────────────────────── -->
+  <div class="result-keywords" role="list" aria-label="キーワード">
+    <span class="keyword-chip" role="listitem">主役感</span>
+    <span class="keyword-chip" role="listitem">祝福</span>
+    <span class="keyword-chip" role="listitem">ときめき</span>
+  </div>
+  <!-- /KEYWORDS -->
+
+
+  <!-- ── TYPE SUMMARY ──────────────────────────────── -->
+  <section class="result-section result-summary" aria-labelledby="summary-heading">
+    <p class="result-section__eyebrow" aria-hidden="true">Type Summary</p>
+    <h2 class="result-section__heading" id="summary-heading">このタイプのお客様像</h2>
+    <p class="result-summary__text">
+      このタイプのお客様は、主役としてのときめきと、ゲストと幸せを分かち合う喜びの両方を大切にします。自分らしく輝ける世界観の中で、みんなの笑顔に包まれる時間に強く惹かれます。
+    </p>
+  </section>
+  <!-- /TYPE SUMMARY -->
+
+
+  <!-- ── PLANNING INSIGHT ──────────────────────────── -->
+  <section class="result-section result-insight" aria-labelledby="insight-heading">
+    <p class="result-section__eyebrow" aria-hidden="true">Planning Insight</p>
+    <h2 class="result-section__heading" id="insight-heading">接客に活かせる視点</h2>
+
+    <div class="result-insight-grid">
+
+      <div class="insight-item">
+        <span class="insight-item__label">求めるもの</span>
+        <p class="insight-item__value">憧れの世界観で主役として最高の一日を過ごしたい</p>
+      </div>
+
+      <div class="insight-item">
+        <span class="insight-item__label">即決スイッチ</span>
+        <p class="insight-item__value">憧れを叶えられる限定感・演出</p>
+      </div>
+
+      <div class="insight-item">
+        <span class="insight-item__label">提案のポイント</span>
+        <p class="insight-item__value">憧れを叶える演出・空間・ドレス・写真映えを提案</p>
+      </div>
+
+      <div class="insight-item">
+        <span class="insight-item__label">おすすめ提案</span>
+        <p class="insight-item__value">ドラマチックな演出・大階段・オーダーメイドドレス・フォトジェニック装飾</p>
+      </div>
+
+    </div>
+  </section>
+  <!-- /PLANNING INSIGHT -->
+
+
+  <!-- ── COMMUNICATION GUIDE ───────────────────────── -->
+  <section class="result-section result-communication" aria-labelledby="comm-heading">
+    <p class="result-section__eyebrow" aria-hidden="true">Communication Guide</p>
+    <h2 class="result-section__heading" id="comm-heading">言葉の設計</h2>
+
+    <div class="result-communication__cols">
+
+      <div class="comm-col comm-col--ok">
+        <p class="comm-col__label">刺さる言葉</p>
+        <ul class="comm-col__list">
+          <li class="comm-col__item">あなたが一番輝く一日を</li>
+          <li class="comm-col__item">映画のような特別なあなたに</li>
+          <li class="comm-col__item">ふさわしい結婚式を</li>
+        </ul>
+      </div>
+
+      <div class="comm-col comm-col--ng">
+        <p class="comm-col__label">NG ワード</p>
+        <ul class="comm-col__list">
+          <li class="comm-col__item">予算内で考えましょう</li>
+          <li class="comm-col__item">みんな同じで十分です</li>
+          <li class="comm-col__item">普通でいいですよ</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+  <!-- /COMMUNICATION GUIDE -->
+
+
+  <!-- ── PLANNER MEMO ───────────────────────────────── -->
+  <aside class="planner-memo" aria-labelledby="memo-heading">
+    <p class="planner-memo__eyebrow" aria-hidden="true">Planner Memo</p>
+    <h2 class="planner-memo__heading" id="memo-heading">接客メモ</h2>
+    <p class="planner-memo__text">
+      主役感と祝福感の両立が鍵。世界観だけでなく、当日の高揚感まで具体的に想像できる提案が有効。
+    </p>
+  </aside>
+  <!-- /PLANNER MEMO -->
+
+
+  <!-- ── FOOTER CTA ─────────────────────────────────── -->
+  <footer class="result-footer-cta">
+    <p class="result-footer-cta__note">Be-hylite Personality 30</p>
+    <a class="result-footer-cta__link" href="#">
+      このタイプをもっと詳しく見る
+    </a>
+  </footer>
+  <!-- /FOOTER CTA -->
+
+</section>
+<!-- /result-type-template -->
+
+</div>
+
+</body>
+</html>
